@@ -245,7 +245,7 @@ tabMain:Button{
 
 tabTimings:Textbox{
 	Name = "Standing Shot",
-	Description = "Default: 0.875"
+	Description = "Default: 0.875",
 	Callback = function(timing1) tblSettings.tblTimings["Standing Shot"] = timing1 end
 }
 
@@ -254,12 +254,5 @@ tabTimings:Textbox{
 	Description = "Default: 0.865",
 	Callback = function(timing2) tblSettings.tblTimings["Off Dribble Shot"] = timing2 end
 }
-
-for i, v in pairs(tblSettings.tblTimings) do
-    print(#i)
-end
-
-local Ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue() or Stats.PerformanceStats["Ping"]:GetValue())
-print(1 + (15 * 0.599))
 
 print(tblSettings.Signature, "Loaded") -- Confirmation
