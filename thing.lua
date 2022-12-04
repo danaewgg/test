@@ -216,7 +216,7 @@ end)
 for i, v in pairs(tblSettings.tblTimings) do
 	window2:Box(i, function(text, focuslost)
 		if focuslost then
-			tblSettings.tblTimings[v] = text
+			tblSettings.tblTimings[i] = text
 			print(tblSettings.tblTimings[i], tblSettings.tblTimings[v])
 		end
 	end)
