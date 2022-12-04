@@ -214,6 +214,11 @@ local tabMain = GUI:Tab{
 	Icon = "rbxassetid://8569322835"
 }   
 
+local tabTimings = GUI:Tab{
+	Name = "Timings",
+	Icon = "rbxassetid://8569322835"
+}   
+
 tabMain:Toggle{
 	Name = "Perfect Release",
 	StartingState = false,
@@ -237,6 +242,22 @@ tabMain:Button{
 		end
 	end
 }
+
+tabTimings:Textbox{
+	Name = "Standing Shot",
+	Description = "Default: 0.875"
+	Callback = function(timing1) tblSettings.tblTimings["Standing Shot"] = timing1 end
+}
+
+tabTimings:Textbox{
+	Name = "Off Dribble Shot",
+	Description = "Default: 0.865",
+	Callback = function(timing2) tblSettings.tblTimings["Off Dribble Shot"] = timing2 end
+}
+
+for i, v in pairs(tblSettings.tblTimings) do
+    print(#i)
+end
 
 local Ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue() or Stats.PerformanceStats["Ping"]:GetValue())
 print(1 + (15 * 0.599))
