@@ -245,13 +245,13 @@ tabMain:Button{
 
 tabTimings:Textbox{
 	Name = "Standing Shot",
-	Description = "Default: 0.875",
+	Description = "Default: 0.875 \nDoesn't work for timings above 1",
 	Callback = function(timing1) tblSettings.tblTimings["Standing Shot"] = timing1 end
 }
 
 tabTimings:Textbox{
 	Name = "Off Dribble Shot",
-	Description = "Default: 0.865",
+	Description = "Default: 0.865 \nDoesn't work for timings above 1",
 	Callback = function(timing2) tblSettings.tblTimings["Off Dribble Shot"] = timing2 end
 }
 
