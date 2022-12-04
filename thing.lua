@@ -1,3 +1,10 @@
+--discord.gg/boronide, code generated using luamin.js™
+
+
+
+-- Only execute after you've spawned in
+
+
 local Workspace = game:GetService("Workspace")
 local Stats = game:GetService("Stats")
 local UserInputService = game:GetService("UserInputService")
@@ -8,10 +15,12 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Ping = Stats.PerformanceStats.Ping
 
-local Character = LocalPlayer.Character -- Defined later
+local Character = LocalPlayer.Character
 
 local remotePath = ReplicatedStorage.GameEvents
-local Args = { ... }
+local Args = {
+	...
+}
 local Method = getnamecallmethod()
 
 local tblResources = {
@@ -30,9 +39,9 @@ local tblResources = {
 }
     
 local tblSettings = {
-    Signature = "[danhub]",
-    autoRelease = false,
-    tblTimings = {
+	Signature = "[danhub]",
+	autoRelease = true,
+	tblTimings = {
 		["Standing Shot"] = 0.875,
 		["Off Dribble Shot"] = 0.865,
 		["Drift Shot"] = 0.85,
@@ -67,71 +76,69 @@ local tblSettings = {
 		["Post Hook"] = 0.865,
 		["Hopstep Post Hook"] = 0.8,
 		["Dropstep Post Hook"] = 0.8
-    }
+	}
 }
 
 local function getMeterSetting()
-    if tblResources.tblMeter["settingShotMeter"].ContentText then
-        return tblResources.tblMeter["settingShotMeter"].ContentText
-    else
-        print(tblSettings.Signature, "Something went wrong with getMeterSetting()")
-        return
-    end
+	if tblResources.tblMeter["settingShotMeter"].ContentText then
+		return tblResources.tblMeter["settingShotMeter"].ContentText
+	else
+		print(tblSettings.Signature, "Something went wrong with getMeterSetting()")
+		return
+	end
 end
 
 local function getShotType()
-    if Character:GetAttribute("ShotType") then
-        return Character:GetAttribute("ShotType")
-    elseif not Character:GetAttribute("ShotType") then
-        repeat 
-            task.wait()
-        until Character:GetAttribute("ShotType")
-
-        return Character:GetAttribute("ShotType")
-    else
-        print(tblSettings.Signature, "Something went wrong with getShotType()")
-        return
-    end
+	if Character:GetAttribute("ShotType") then
+		return Character:GetAttribute("ShotType")
+	elseif not Character:GetAttribute("ShotType") then
+		repeat
+			task.wait()
+		until Character:GetAttribute("ShotType")
+		return Character:GetAttribute("ShotType")
+	else
+		print(tblSettings.Signature, "Something went wrong with getShotType()")
+		return
+	end
 end
 
 local function getShotMeter()
-    if Character:GetAttribute("ShotMeter") then
-        return Character:GetAttribute("ShotMeter")
-    elseif not Character:GetAttribute("ShotMeter") then
-        repeat
-            task.wait()
-        until Character:GetAttribute("ShotMeter")
-        return Character:GetAttribute("ShotMeter")
-    else
-        warn(tblSettings.Signature, "Something went wrong with getShotMeter()")
-        return
-    end
+	if Character:GetAttribute("ShotMeter") then
+		return Character:GetAttribute("ShotMeter")
+	elseif not Character:GetAttribute("ShotMeter") then
+		repeat
+			task.wait()
+		until Character:GetAttribute("ShotMeter")
+		return Character:GetAttribute("ShotMeter")
+	else
+		warn(tblSettings.Signature, "Something went wrong with getShotMeter()")
+		return
+	end
 end
 
 local function getLandedShotMeter()
-    if Character:GetAttribute("LandedShotMeter") then
-        return Character:GetAttribute("LandedShotMeter")
-    elseif not Character:GetAttribute("LandedShotMeter") then
-        repeat 
-            task.wait()
-        until Character:GetAttribute("LandedShotMeter")
-
-        return Character:GetAttribute("LandedShotMeter")
-    else
-        print(tblSettings.Signature, "Something went wrong with getLandedShotMeter()")
-        return
-    end
+	if Character:GetAttribute("LandedShotMeter") then
+		return Character:GetAttribute("LandedShotMeter")
+	elseif not Character:GetAttribute("LandedShotMeter") then
+		repeat
+			task.wait()
+		until Character:GetAttribute("LandedShotMeter")
+		return Character:GetAttribute("LandedShotMeter")
+	else
+		print(tblSettings.Signature, "Something went wrong with getLandedShotMeter()")
+		return
+	end
 end
 
 local function noMeterPerfect()
     --if table.find(tblSettings.tblTimings, getShotType()) then
-	    print(tblSettings.Signature, "Shot Type:", getShotType())
-	    repeat 
-	        task.wait()
-	    until getShotMeter() >= tblSettings.tblTimings[getShotType()]
-	    print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-	    remotePath.ClientAction:FireServer("Shoot", false)
-	    print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+	print(tblSettings.Signature, "Shot Type:", getShotType())
+	repeat
+		task.wait()
+	until getShotMeter() >= tblSettings.tblTimings[getShotType()]
+	print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+	remotePath.ClientAction:FireServer("Shoot", false)
+	print(tblSettings.Signature, "Landed:", getLandedShotMeter())
     --else
         --warn(tblSettings.Signature, "Something went wrong with noMeterPerfect()")
 	--end
@@ -148,23 +155,22 @@ local function meterPerfect()
 		remotePath.ClientAction:FireServer("Shoot", false)
 		print(tblSettings.Signature, "Landed:", getLandedShotMeter())
 	elseif not Character.ShotMeterUI.Enabled then -- Shot Meter is not visible
-        print(tblSettings.Signature, "Shot Type:", getShotType())
-        repeat
-            task.wait()
-        until Character["ShotMeterTiming"].Value >= tblSettings.tblTimings[getShotType()]
-        print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-        remotePath.ClientAction:FireServer("Shoot", false)
-        print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-    else
-        warn(tblSettings.Signature, "Issue with meterPerfect, alternating to noMeterPerfect")
+		print(tblSettings.Signature, "Shot Type:", getShotType())
+		repeat
+			task.wait()
+		until Character["ShotMeterTiming"].Value >= tblSettings.tblTimings[getShotType()]
+		print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+		remotePath.ClientAction:FireServer("Shoot", false)
+		print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+	else
+		warn(tblSettings.Signature, "Issue with meterPerfect, alternating to noMeterPerfect")
 		pcall(noMeterPerfect())
 	end
 end
 
-
 local function aimbotPrep()
 	if (Character:GetAttribute("ShootingAnim") or Character:GetAttribute("AlleyOop") == true) and tblSettings.autoRelease then
-	    print("hi")
+		print("hi")
 		if getMeterSetting() ~= "Off" then -- Not off
 			print(tblSettings.Signature, "Calling meterPerfect")
 			pcall(meterPerfect())
@@ -178,11 +184,14 @@ local function aimbotPrep()
 end
 
 local function defineVariables()
-    Character = LocalPlayer.Character
-    tblResources.tblMeter["Size"] = Character("ShotMeterUI.Meter.Bar.Size.Y.Scale")
+	Character = LocalPlayer.Character
+	tblResources.tblMeter["Size"] = Character("ShotMeterUI.Meter.Bar.Size.Y.Scale")
 end
 
 local function connectMain()
+	Character = LocalPlayer.Character
+	Character:GetAttributeChangedSignal("ShootingAnim"):Connect(aimbotPrep)
+	Character:GetAttributeChangedSignal("AlleyOop"):Connect(aimbotPrep)
 	pcall(defineVariables())
 	pcall(aimbotPrep())
 end
@@ -193,61 +202,34 @@ Character:GetAttributeChangedSignal("AlleyOop"):Connect(aimbotPrep)
 
 LocalPlayer.CharacterAdded:Connect(connectMain)
 
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
 
-local GUI = Mercury:Create{
-	Name = "Dan's Hub",
-	Size = UDim2.fromOffset(600, 400),
-	Theme = Mercury.Themes.Dark,
-	Link = "danshub.gg"
-}
+local window = library:Window("Main")
+local window2 = library:Window("Timings")
 
-GUI:Credit{
-	Name = "Xeziru",
-	Description = "Helped with the script",
-	V3rm = "KingKeero",
-	Discord = "Xeziru#3383"
-}
+window:Toggle("Perfect Release", true, function(bool)
+	autoRelease = bool 
+	print(tblSettings.Signature, "Perfect Release:", bool)
+end)
 
-local tabMain = GUI:Tab{
-	Name = "Core",
-	Icon = "rbxassetid://8569322835"
-}   
-
-local tabTimings = GUI:Tab{
-	Name = "Timings",
-	Icon = "rbxassetid://8569322835"
-}   
-
-tabMain:Toggle{
-	Name = "Perfect Release",
-	StartingState = false,
-	Description = "Good release every shot",
-	Callback = function(state)
-		tblSettings.autoRelease = state
-		print(tblSettings.Signature, "Perfect Release:", state)
-	end
-}
-
-tabMain:Button{
-	Name = "Rejoin",
-	Description = nil,
-	Callback = function()
-		if # Players:GetPlayers() <= 1 then
-			LocalPlayer:Kick("\nRejoining, one second...")
-			task.wait()
-			TeleportService:Teleport(game.PlaceId, LocalPlayer)
-		else
-			TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
-		end
-	end
-}
 
 for i, v in pairs(tblSettings.tblTimings) do
-tabTimings:Textbox{
-	Name = i,
-	Description = "Default: " .. v,
-	Callback = function(timing2) tblSettings.tblTimings[i] = timing2 print(tblSettings.tblTimings[i]) end
-}
+	window2:Box(i, function(text, focuslost)
+		if focuslost then
+			tblSettings.tblTimings[v] = text
+			print(tblSettings.tblTimings[i], tblSettings.tblTimings[v])
+		end
+	end)
 end
-print(tblSettings.Signature, "Loaded") -- Confirmation
+
+window:Button("Rejoin", function()
+	if # Players:GetPlayers() <= 1 then
+		LocalPlayer:Kick("\nRejoining, one second...")
+		task.wait()
+		TeleportService:Teleport(game.PlaceId, LocalPlayer)
+	else
+		TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+	end
+end)
+
+print(tblSettings.Signature, "Loaded")
