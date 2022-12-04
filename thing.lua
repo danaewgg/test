@@ -31,7 +31,7 @@ local tblResources = {
     
 local tblSettings = {
     Signature = "[danhub]",
-    autoRelease = true,
+    autoRelease = false,
     tblTimings = {
 		["Standing Shot"] = 0.875,
 		["Off Dribble Shot"] = 0.865,
@@ -192,5 +192,53 @@ Character:GetAttributeChangedSignal("ShootingAnim"):Connect(aimbotPrep)
 Character:GetAttributeChangedSignal("AlleyOop"):Connect(aimbotPrep)
 
 LocalPlayer.CharacterAdded:Connect(connectMain)
+
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+
+local GUI = Mercury:Create{
+	Name = "Dan's Hub",
+	Size = UDim2.fromOffset(600, 400),
+	Theme = Mercury.Themes.Dark,
+	Link = "danshub.gg"
+}
+
+GUI:Credit{
+	Name = "Xeziru",
+	Description = "Helped with the script",
+	V3rm = "KingKeero",
+	Discord = "Xeziru#3383"
+}
+
+local tabMain = GUI:Tab{
+	Name = "Core",
+	Icon = "rbxassetid://8569322835"
+}   
+
+tabMain:Toggle{
+	Name = "Perfect Release",
+	StartingState = false,
+	Description = "Good release every shot",
+	Callback = function(state)
+		tblSettings.autoRelease = state
+		print(tblSettings.Signature, "Perfect Release:", state)
+	end
+}
+
+tabMain:Button{
+	Name = "Rejoin",
+	Description = nil,
+	Callback = function()
+		if # Players:GetPlayers() <= 1 then
+			LocalPlayer:Kick("\nRejoining, one second...")
+			task.wait()
+			TeleportService:Teleport(game.PlaceId, LocalPlayer)
+		else
+			TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+		end
+	end
+}
+
+local Ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue() or Stats.PerformanceStats["Ping"]:GetValue())
+print(1 + (15 * 0.599))
 
 print(tblSettings.Signature, "Loaded") -- Confirmation
