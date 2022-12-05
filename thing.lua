@@ -1,4 +1,4 @@
--- discord.gg/boronide, code generated using luamin.js™
+--discord.gg/boronide, code generated using luamin.js™
 
 -- Only execute after you've spawned in
 
@@ -211,7 +211,7 @@ local function meterPerfect()
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
 				local releaseTiming = getTimingValue(shotType, ping)
-				if ping <= 70 then
+				if ping <= 100 then
 					repeat
 						task.wait()
 					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
@@ -221,10 +221,10 @@ local function meterPerfect()
 					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
 					print(tblSettings.Signature, getRelease())
 					break
-				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 70) then
+				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 100) then
 					repeat
 						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.25)
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.245)
 					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
 					remotePath.ClientAction:FireServer("Shoot", false)
