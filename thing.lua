@@ -177,8 +177,8 @@ function getTimingValue(shotType, ping)
   local highPing = 200
   
   -- Find the timing values for the low and high ping values
-  local lowPingTiming = tblSettings.tblTimings[lowPing][shotType]
-  local highPingTiming = tblSettings.tblTimings[highPing][shotType]
+  local lowPingTiming = tblSettings.tblTimings30[shotType]
+  local highPingTiming = tblSettings.tblTimings200[shotType]
   
   -- Calculate the slope and y-intercept of the line
   local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
