@@ -220,8 +220,8 @@ for i, v in pairs(tblSettings.tblTimings) do
 				i = text
 				print(i, v)
 			end
-		end
-	end)
+		end)
+	end
 end
 
 window:Button("Rejoin", function()
