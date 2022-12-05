@@ -173,16 +173,21 @@ local function getRelease()
 end
 
 function getTimingValue(shotType, ping)
-	local lowPing = 30
-	local highPing = 200
-	
-	local lowPingTiming = tblSettings.tblTimings30[shotType]
-	local highPingTiming = tblSettings.tblTimings200[shotType]
-	
-	local pingRange = highPing - lowPing
-	local pingDelta = ping - lowPing
-	return lowPingTiming + (highPingTiming - lowPingTiming) * (pingDelta / pingRange)
+  local lowPing = 30
+  local highPing = 200
+  
+  -- Find the timing values for the low and high ping values
+  local lowPingTiming = tblSettings.tblTimings[lowPing][shotType]
+  local highPingTiming = tblSettings.tblTimings[highPing][shotType]
+  
+  -- Calculate the slope and y-intercept of the line
+  local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
+  local b = lowPingTiming - m * lowPing
+  
+  -- Use the calculated line to find the timing value for the given ping value
+  return m * ping + b
 end
+
 
 local function noMeterPerfect()
 	for k, v in pairs(tblSettings.tblTimings) do
