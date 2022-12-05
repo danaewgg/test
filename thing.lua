@@ -1,4 +1,4 @@
---discord.gg/boronide, code generated using luamin.js™
+-- discord.gg/boronide, code generated using luamin.js™
 
 -- Only execute after you've spawned in
 
@@ -211,7 +211,7 @@ local function meterPerfect()
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
 				local releaseTiming = getTimingValue(shotType, ping)
-				if ping <= 60 then
+				if ping <= 70 then
 					repeat
 						task.wait()
 					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
@@ -221,7 +221,7 @@ local function meterPerfect()
 					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
 					print(tblSettings.Signature, getRelease())
 					break
-				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 60) then
+				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 70) then
 					repeat
 						task.wait()
 					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.25)
@@ -308,6 +308,7 @@ LocalPlayer.CharacterAdded:Connect(connectMain)
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
 
 local window = library:Window("Main")
+local window2 = library:Window("Timings")
 
 window:Toggle("Perfect Release", true, function(bool)
 	autoRelease = bool 
