@@ -173,21 +173,19 @@ local function getRelease()
 end
 
 function getTimingValue(shotType, ping)
-    local lowPing = 30
-    local highPing = 200
-    
-    -- Find the timing values for the low and high ping values
-    local lowPingTiming = tblSettings.tblTimings30[shotType]
-    local highPingTiming = tblSettings.tblTimings200[shotType]
-    
-    -- Calculate the polynomial coefficients
-    local a = (highPingTiming - lowPingTiming) / (highPing - lowPing)^3
-    local b = -3 * a * lowPing
-    local c = 3 * a * lowPing^2
-    local d = lowPingTiming - (a * lowPing^3 + b * lowPing^2 + c * lowPing)
-    
-    -- Calculate the timing value using the polynomial equation
-    return a * ping^3 + b * ping^2 + c * ping + d
+  local lowPing = 30
+  local highPing = 200
+  
+  -- Find the timing values for the low and high ping values
+  local lowPingTiming = tblSettings.tblTimings30[shotType]
+  local highPingTiming = tblSettings.tblTimings200[shotType]
+  
+  -- Calculate the slope and y-intercept of the line
+  local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
+  local b = lowPingTiming - m * lowPing
+  
+  -- Use the calculated line to find the timing value for the given ping value
+  return m * ping + b
 end
 
 
