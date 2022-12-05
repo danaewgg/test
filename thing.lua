@@ -244,7 +244,7 @@ local function meterPerfect()
 				else
 					repeat
 						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.25)
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.235)
 					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
 					remotePath.ClientAction:FireServer("Shoot", false)
