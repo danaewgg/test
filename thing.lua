@@ -217,7 +217,7 @@ for i, v in pairs(tblSettings.tblTimings) do
 	if i == "Post Close Shot" or i == "Dropstep Layup" or i == "AlleyOop Close Shot" or i == "Post Standing Dunk" or i == "Driving Dunk" or i == "AlleyOop Standing Dunk" or i == "Post Fade" or i == "Hopstep Off Dribble Shot" then
 		window2:Box(i, function(text, focuslost)
 			if focuslost then
-				tblSettings.tblTimings[i] = text
+				v = text
 				print(tblSettings.tblTimings[i], v)
 			end
 		end)
