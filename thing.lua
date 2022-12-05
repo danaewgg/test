@@ -214,7 +214,7 @@ local function meterPerfect()
 				if ping <= 60 then
 					repeat
 						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.19)
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
 					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
 					remotePath.ClientAction:FireServer("Shoot", false)
