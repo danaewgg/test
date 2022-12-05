@@ -1,9 +1,6 @@
 --discord.gg/boronide, code generated using luamin.js™
 
-
-
 -- Only execute after you've spawned in
-
 
 local Workspace = game:GetService("Workspace")
 local Stats = game:GetService("Stats")
@@ -18,9 +15,7 @@ local Ping = Stats.PerformanceStats.Ping
 local Character = LocalPlayer.Character
 
 local remotePath = ReplicatedStorage.GameEvents
-local Args = {
-	...
-}
+local Args = {...}
 local Method = getnamecallmethod()
 
 local tblResources = {
@@ -41,7 +36,7 @@ local tblResources = {
 local tblSettings = {
 	Signature = "[danhub]",
 	autoRelease = true,
-	tblTimings = {
+	tblTimings30 = {
 		["Standing Shot"] = 0.875,
 		["Off Dribble Shot"] = 0.865,
 		["Drift Shot"] = 0.85,
@@ -76,6 +71,42 @@ local tblSettings = {
 		["Post Hook"] = 0.865,
 		["Hopstep Post Hook"] = 0.8,
 		["Dropstep Post Hook"] = 0.8
+	},
+	tblTimings200 = {
+		["Standing Shot"] = 0.38,
+		["Off Dribble Shot"] = 0.395,
+		["Drift Shot"] = 0.37,
+		["Far Shot"] = 0.25,
+		["Freethrow"] = 0.4,
+		["Hopstep Off Dribble Shot"] = 0.39,
+		["Hopstep Drift Shot"] = 0.36,
+		["Layup"] = 0.32,
+		["Reverse Layup"] = 0.31,
+		["Hopstep Layup"] = 0.31,
+		["Eurostep Layup"] = 0.285,
+		["Dropstep Layup"] = 0.29,
+		["Post Layup"] = 0.3,
+		["Floater"] = 0.305,
+		["Hopstep Floater"] = 0.29,
+		["Eurostep Floater"] = 0.27,
+		["Close Shot"] = 0.28,
+		["Hopstep Close Shot"] = 0.26,
+		["Dropstep Close Shot"] = 0.259,
+		["Post Close Shot"] = 0.26,
+		["AlleyOop Close Shot"] = 0.08,
+		["Standing Dunk"] = 0.35,
+		["Hopstep Standing Dunk"] = 0.3,
+		["Post Standing Dunk"] = 0.31,
+		["Driving Dunk"] = 0.38,
+		["AlleyOop Standing Dunk"] = 0.08,
+		["AlleyOop Driving Dunk"] = 0.08,
+		["Post Fade"] = 0.36,
+		["Drift Post Fade"] = 0.365,
+		["Hopstep Post Fade"] = 0.36,
+		["Dropstep Post Fade"] = 0.36,
+		["Post Hook"] = 0.31,
+		["Hopstep Post Hook"] = 0.275,
+		["Dropstep Post Hook"] = 0.275
 	}
 }
 
@@ -130,50 +161,122 @@ local function getLandedShotMeter()
 	end
 end
 
+local function getRelease()
+	local releaseType = "Unknown Release"
+	for k, v in pairs(tblResources.tblReleases) do
+		if getLandedShotMeter() <= v then
+			releaseType = k
+			break
+		end
+	end
+	return releaseType
+end
+
+function getTimingValue(shotType, ping)
+	local lowPing = 30
+	local highPing = 200
+	
+	local lowPingTiming = tblSettings.tblTimings30[shotType]
+	local highPingTiming = tblSettings.tblTimings200[shotType]
+	
+	local pingRange = highPing - lowPing
+	local pingDelta = ping - lowPing
+	return lowPingTiming + (highPingTiming - lowPingTiming) * (pingDelta / pingRange)
+end
+
 local function noMeterPerfect()
-    --if table.find(tblSettings.tblTimings, getShotType()) then
-	print(tblSettings.Signature, "Shot Type:", getShotType())
-	repeat
-		task.wait()
-	until getShotMeter() >= tblSettings.tblTimings[getShotType()]
-	print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-	remotePath.ClientAction:FireServer("Shoot", false)
-	print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-    --else
-        --warn(tblSettings.Signature, "Something went wrong with noMeterPerfect()")
-	--end
+	for k, v in pairs(tblSettings.tblTimings) do
+		if k == getShotType() then
+			print(tblSettings.Signature, "Shot Type:", getShotType())
+			repeat
+				task.wait()
+			until getShotMeter() >= tblSettings.tblTimings[getShotType()]
+			print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+			remotePath.ClientAction:FireServer("Shoot", false)
+			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+			print(getRelease())
+			break
+		else
+			warn(tblSettings.Signature, "Something went wrong with noMeterPerfect()")
+			break
+		end
+	end  
 end
 
 local function meterPerfect()
-	if Character.ShotMeterUI.Enabled then -- Shot Meter is visible
-		print(tblSettings.Signature, "Shot Type:", getShotType())
-		repeat
-			task.wait()
-		until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (tblSettings.tblTimings[getShotType()] - 0.18)
-		print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-		print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-		remotePath.ClientAction:FireServer("Shoot", false)
-		print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-	elseif not Character.ShotMeterUI.Enabled then -- Shot Meter is not visible
-		print(tblSettings.Signature, "Shot Type:", getShotType())
-		repeat
-			task.wait()
-		until Character["ShotMeterTiming"].Value >= tblSettings.tblTimings[getShotType()]
-		print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-		remotePath.ClientAction:FireServer("Shoot", false)
-		print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-	else
-		warn(tblSettings.Signature, "Issue with meterPerfect, alternating to noMeterPerfect")
-		pcall(noMeterPerfect())
+	for k, v in pairs(tblSettings.tblTimings30) do
+		local shotType = getShotType()
+		if k == shotType then
+			if Character.ShotMeterUI.Enabled then
+				print(tblSettings.Signature, "Shot Type:", shotType)
+				local ping = Ping:GetValue()
+				local releaseTiming = getTimingValue(shotType, ping)
+				if ping <= 60 then
+					repeat
+						task.wait()
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming + 3)
+					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
+					remotePath.ClientAction:FireServer("Shoot", false)
+					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+					print(tblSettings.Signature, getRelease())
+					break
+				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 60) then
+					repeat
+						task.wait()
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.25)
+					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
+					remotePath.ClientAction:FireServer("Shoot", false)
+					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+					print(tblSettings.Signature, getRelease())
+					break
+				elseif shotType == "Drift Shot" or "Hopstep Drift Shot" and not (ping == 200 or ping <= 60) then
+					repeat
+						task.wait()
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.195)
+					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
+					remotePath.ClientAction:FireServer("Shoot", false)
+					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+					print(tblSettings.Signature, getRelease())
+					break
+				else
+					repeat
+						task.wait()
+					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.25)
+					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
+					remotePath.ClientAction:FireServer("Shoot", false)
+					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+					print(tblSettings.Signature, getRelease())
+					break
+				end
+			end
+			if not Character.ShotMeterUI.Enabled then -- Shot Meter is not visible
+				print(tblSettings.Signature, "Shot Type:", shotType)
+				repeat
+					task.wait()
+				until Character["ShotMeterTiming"].Value >= tblSettings.tblTimings[shotType]
+				print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+				remotePath.ClientAction:FireServer("Shoot", false)
+				print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+				print(tblSettings.Signature, getRelease())
+				break
+			else
+				warn(tblSettings.Signature, "Issue with meterPerfect, alternating to noMeterPerfect")
+				pcall(noMeterPerfect())
+				break
+			end
+		end
 	end
 end
 
 local function aimbotPrep()
 	if (Character:GetAttribute("ShootingAnim") or Character:GetAttribute("AlleyOop") == true) and tblSettings.autoRelease then
-		print("hi")
 		if getMeterSetting() ~= "Off" then -- Not off
 			print(tblSettings.Signature, "Calling meterPerfect")
-			pcall(meterPerfect())
+			meterPerfect()
 		elseif getMeterSetting() == "Off" then -- Off
 			print(tblSettings.Signature, "Calling noMeterPerfect")
 			pcall(noMeterPerfect())
@@ -211,18 +314,6 @@ window:Toggle("Perfect Release", true, function(bool)
 	autoRelease = bool 
 	print(tblSettings.Signature, "Perfect Release:", bool)
 end)
-
-
-for i, v in pairs(tblSettings.tblTimings) do
-	if i == "Post Close Shot" or i == "Dropstep Layup" or i == "AlleyOop Close Shot" or i == "Post Standing Dunk" or i == "Driving Dunk" or i == "AlleyOop Standing Dunk" or i == "Post Fade" or i == "Hopstep Off Dribble Shot" then
-		window2:Box(i, function(text, focuslost)
-			if focuslost then
-				v = text
-				print(tblSettings.tblTimings[i], v)
-			end
-		end)
-	end
-end
 
 window:Button("Rejoin", function()
 	if # Players:GetPlayers() <= 1 then
