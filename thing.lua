@@ -308,7 +308,6 @@ LocalPlayer.CharacterAdded:Connect(connectMain)
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
 
 local window = library:Window("Main")
-local window2 = library:Window("Timings")
 
 window:Toggle("Perfect Release", true, function(bool)
 	autoRelease = bool 
