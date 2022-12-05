@@ -172,7 +172,7 @@ local function getRelease()
 	return releaseType
 end
 
-function getTimingValue3(shotType, ping)
+function getTimingValue(shotType, ping)
     local lowPing = 30
     local highPing = 200
     
