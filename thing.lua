@@ -218,47 +218,15 @@ local function meterPerfect()
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
 				local releaseTiming = getTimingValue(shotType, ping)
-				if ping <= 100 then
-					repeat
-						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.195)
-					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-					remotePath.ClientAction:FireServer("Shoot", false)
-					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-					print(tblSettings.Signature, getRelease())
-					break
-				elseif shotType == "Far Shot" and not (ping == 200 or ping <= 100) then
-					repeat
-						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.245)
-					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-					remotePath.ClientAction:FireServer("Shoot", false)
-					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-					print(tblSettings.Signature, getRelease())
-					break
-				elseif shotType == "Drift Shot" or "Hopstep Drift Shot" and not (ping == 200 or ping <= 60) then
-					repeat
-						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.195)
-					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-					remotePath.ClientAction:FireServer("Shoot", false)
-					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-					print(tblSettings.Signature, getRelease())
-					break
-				else
-					repeat
-						task.wait()
-					until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.235)
-					print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-					print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-					remotePath.ClientAction:FireServer("Shoot", false)
-					print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-					print(tblSettings.Signature, getRelease())
-					break
-				end
+				repeat
+					task.wait()
+				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming)
+				print(tblSettings.Signature, "Shot Meter:", getShotMeter())
+				print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
+				remotePath.ClientAction:FireServer("Shoot", false)
+				print(tblSettings.Signature, "Landed:", getLandedShotMeter())
+				print(tblSettings.Signature, getRelease())
+				break
 			end
 			if not Character.ShotMeterUI.Enabled then -- Shot Meter is not visible
 				print(tblSettings.Signature, "Shot Type:", shotType)
@@ -315,7 +283,6 @@ LocalPlayer.CharacterAdded:Connect(connectMain)
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
 
 local window = library:Window("Main")
-local window2 = library:Window("Timings")
 
 window:Toggle("Perfect Release", true, function(bool)
 	autoRelease = bool 
