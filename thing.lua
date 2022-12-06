@@ -201,7 +201,7 @@ local function noMeterPerfect()
 			print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 			remotePath.ClientAction:FireServer("Shoot", false)
 			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-			print(getRelease())
+			print(tblSettings.Signature, getRelease())
 			break
 		else
 			warn(tblSettings.Signature, "Something went wrong with noMeterPerfect()")
@@ -220,7 +220,7 @@ local function meterPerfect()
 				local releaseTiming = getTimingValue(getShotType(), ping)
 				repeat
 					task.wait()
-				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming)
+				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
 				print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 				print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
 				remotePath.ClientAction:FireServer("Shoot", false)
@@ -254,7 +254,7 @@ local function aimbotPrep()
 			meterPerfect()
 		elseif getMeterSetting() == "Off" then -- Off
 			print(tblSettings.Signature, "Calling noMeterPerfect")
-			pcall(noMeterPerfect())
+			noMeterPerfect()
 		else
 			warn(tblSettings.Signature, "Something went wrong with the ShootingAnim function")
 		end
