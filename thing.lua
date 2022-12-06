@@ -203,9 +203,6 @@ local function noMeterPerfect()
 			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
 			print(tblSettings.Signature, getRelease())
 			break
-		else
-			warn(tblSettings.Signature, "Something went wrong with noMeterPerfect()")
-			break
 		end
 	end  
 end
