@@ -197,7 +197,7 @@ local function noMeterPerfect()
 			local releaseTiming = getTimingValue(getShotType(), ping)
 			repeat
 				task.wait()
-			until getShotMeter() >= (releaseTiming)
+			until getShotMeter() >= releaseTiming
 			print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 			remotePath.ClientAction:FireServer("Shoot", false)
 			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
