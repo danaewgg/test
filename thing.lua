@@ -190,12 +190,14 @@ end
 
 
 local function noMeterPerfect()
-	for k, v in pairs(tblSettings.tblTimings) do
+	for k, v in pairs(tblSettings.tblTimings30) do
 		if k == getShotType() then
 			print(tblSettings.Signature, "Shot Type:", getShotType())
+			local ping = Ping:GetValue()
+			local releaseTiming = getTimingValue(getShotType(), ping)
 			repeat
 				task.wait()
-			until getShotMeter() >= tblSettings.tblTimings[getShotType()]
+			until getShotMeter() >= (releaseTiming)
 			print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 			remotePath.ClientAction:FireServer("Shoot", false)
 			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
@@ -215,7 +217,7 @@ local function meterPerfect()
 			if Character.ShotMeterUI.Enabled then
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
-				local releaseTiming = getTimingValue(shotType, ping)
+				local releaseTiming = getTimingValue(getShotType(), ping)
 				repeat
 					task.wait()
 				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming)
