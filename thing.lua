@@ -78,7 +78,7 @@ local tblSettings = {
         ["Drift Shot"] = 0.63,
         ["Far Shot"] = 0.5,
         ["Freethrow"] = 0.7,
-        ["Hopstep Off Dribble Shot"] = 0.39,
+        ["Hopstep Off Dribble Shot"] = 0.6,
         ["Hopstep Drift Shot"] = 0.63,
         ["Layup"] = 0.55,
         ["Reverse Layup"] = 0.549,
@@ -254,6 +254,7 @@ local function meterPerfect()
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
 				local releaseTiming = getTimingValue(shotType, ping)
+				print(releaseTiming)
 				repeat
 					task.wait()
 				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
