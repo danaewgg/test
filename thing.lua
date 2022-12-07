@@ -1,6 +1,8 @@
--- discord.gg/boronide, code generated using luamin.js™
+--discord.gg/boronide, code generated using luamin.js™
 
 -- Only execute after you've spawned in
+
+getgenv().danhubDebug = true
 
 local Workspace = game:GetService("Workspace")
 local Stats = game:GetService("Stats")
@@ -15,8 +17,13 @@ local Ping = Stats.PerformanceStats.Ping
 local Character = LocalPlayer.Character
 
 local remotePath = ReplicatedStorage.GameEvents
-local Args = {...}
+local Args = {
+	...
+}
 local Method = getnamecallmethod()
+
+local usedTable = "tblTimings40"
+local useEquation = false
 
 local tblResources = {
 	tblMeter = {
@@ -72,42 +79,42 @@ local tblSettings = {
 		["Hopstep Post Hook"] = 0.8,
 		["Dropstep Post Hook"] = 0.8
 	},
-	    tblTimings100 = {
-        ["Standing Shot"] = 0.66,
-        ["Off Dribble Shot"] = 0.685,
-        ["Drift Shot"] = 0.63,
-        ["Far Shot"] = 0.5,
-        ["Freethrow"] = 0.7,
-        ["Hopstep Off Dribble Shot"] = 0.6,
-        ["Hopstep Drift Shot"] = 0.63,
-        ["Layup"] = 0.55,
-        ["Reverse Layup"] = 0.549,
-        ["Hopstep Layup"] = 0.549,
-        ["Eurostep Layup"] = 0.525,
-        ["Dropstep Layup"] = 0.53,
-        ["Post Layup"] = 0.555,
-        ["Floater"] = 0.55,
-        ["Hopstep Floater"] = 0.57,
-        ["Eurostep Floater"] = 0.565,
-        ["Close Shot"] = 0.5,
-        ["Hopstep Close Shot"] = 0.55,
-        ["Dropstep Close Shot"] = 0.55,
-        ["Post Close Shot"] = 0.55,
-        ["AlleyOop Close Shot"] = 0.5,
-        ["Standing Dunk"] = 0.6,
-        ["Hopstep Standing Dunk"] = 0.3,
-        ["Post Standing Dunk"] = 0.6,
-        ["Driving Dunk"] = 0.6,
-        ["AlleyOop Standing Dunk"] = 0.449,
-        ["AlleyOop Driving Dunk"] = 0.449,
-        ["Post Fade"] = 0.635,
-        ["Drift Post Fade"] = 0.62,
-        ["Hopstep Post Fade"] = 0.61,
-        ["Dropstep Post Fade"] = 0.61,
-        ["Post Hook"] = 0.59,
-        ["Hopstep Post Hook"] = 0.515,
-        ["Dropstep Post Hook"] = 0.505
-    },
+	tblTimings100 = {
+		["Standing Shot"] = 0.66,
+		["Off Dribble Shot"] = 0.685,
+		["Drift Shot"] = 0.63,
+		["Far Shot"] = 0.5,
+		["Freethrow"] = 0.7,
+		["Hopstep Off Dribble Shot"] = 0.6,
+		["Hopstep Drift Shot"] = 0.63,
+		["Layup"] = 0.55,
+		["Reverse Layup"] = 0.549,
+		["Hopstep Layup"] = 0.549,
+		["Eurostep Layup"] = 0.525,
+		["Dropstep Layup"] = 0.53,
+		["Post Layup"] = 0.555,
+		["Floater"] = 0.55,
+		["Hopstep Floater"] = 0.57,
+		["Eurostep Floater"] = 0.565,
+		["Close Shot"] = 0.5,
+		["Hopstep Close Shot"] = 0.55,
+		["Dropstep Close Shot"] = 0.55,
+		["Post Close Shot"] = 0.55,
+		["AlleyOop Close Shot"] = 0.5,
+		["Standing Dunk"] = 0.6,
+		["Hopstep Standing Dunk"] = 0.3,
+		["Post Standing Dunk"] = 0.6,
+		["Driving Dunk"] = 0.6,
+		["AlleyOop Standing Dunk"] = 0.449,
+		["AlleyOop Driving Dunk"] = 0.449,
+		["Post Fade"] = 0.635,
+		["Drift Post Fade"] = 0.62,
+		["Hopstep Post Fade"] = 0.61,
+		["Dropstep Post Fade"] = 0.61,
+		["Post Hook"] = 0.59,
+		["Hopstep Post Hook"] = 0.515,
+		["Dropstep Post Hook"] = 0.505
+	},
 	tblTimings200 = {
 		["Standing Shot"] = 0.38,
 		["Off Dribble Shot"] = 0.395,
@@ -209,34 +216,34 @@ local function getRelease()
 end
 
 function getTimingValue(shotType, ping)
-  local lowPing = 40
-  local mediumPing = 100
-  local highPing = 200
+	local lowPing = 40
+	local mediumPing = 100
+	local highPing = 200
   
   -- Find the timing values for the low, medium, and high ping values
-  local lowPingTiming = tblSettings.tblTimings40[shotType] -- tblTimings[lowPing][shotType]
-  local mediumPingTiming = tblSettings.tblTimings100[shotType] -- tblTimings[mediumPing][shotType]
-  local highPingTiming = tblSettings.tblTimings200[shotType] -- tblTimings[highPing][shotType]
+	local lowPingTiming = tblSettings.tblTimings40[shotType] -- tblTimings[lowPing][shotType]
+	local mediumPingTiming = tblSettings.tblTimings100[shotType] -- tblTimings[mediumPing][shotType]
+	local highPingTiming = tblSettings.tblTimings200[shotType] -- tblTimings[highPing][shotType]
   
   -- Calculate the slope and y-intercept of the line using the low, medium, and high ping values
-  local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
-  local b = mediumPingTiming - m * mediumPing
+	local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
+	local b = mediumPingTiming - m * mediumPing
   
   -- Use the calculated line to find the timing value for the given ping value
-  return m * ping + b
+	return m * ping + b
 end
 
 
 local function noMeterPerfect()
 	for k, v in pairs(tblSettings.tblTimings40) do
-	    local shotType = getShotType()
+		local shotType = getShotType()
 		if k == shotType then
-			print(tblSettings.Signature, "Shot Type:", getShotType())
+			print(tblSettings.Signature, "Shot Type:", shotType)
 			local ping = Ping:GetValue()
-			local releaseTiming = getTimingValue(getShotType(), ping)
+			local releaseTiming = getTimingValue(shotType, ping)
 			repeat
 				task.wait()
-			until getShotMeter() >= releaseTiming
+			until getShotMeter() >= (tblSettings[usedTable][shotType] - 0.1 or releaseTiming - 0.1)
 			print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 			remotePath.ClientAction:FireServer("Shoot", false)
 			print(tblSettings.Signature, "Landed:", getLandedShotMeter())
@@ -249,27 +256,19 @@ end
 local function meterPerfect()
 	for k, v in pairs(tblSettings.tblTimings40) do
 		local shotType = getShotType()
+		local ping = Ping:GetValue()
+		local releaseTiming = getTimingValue(shotType, ping)
 		if k == shotType then
 			if Character.ShotMeterUI.Enabled then
-				print(tblSettings.Signature, "Shot Type:", shotType)
-				local ping = Ping:GetValue()
-				local releaseTiming = getTimingValue(shotType, ping)
-				print(releaseTiming)
 				repeat
 					task.wait()
-				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
-				print(tblSettings.Signature, "Shot Meter:", getShotMeter())
-				print(tblSettings.Signature, "Size:", Character.ShotMeterUI.Meter.Bar.Size.Y.Scale)
-				remotePath.ClientAction:FireServer("Shoot", false)
-				print(tblSettings.Signature, "Landed:", getLandedShotMeter())
-				print(tblSettings.Signature, getRelease())
-				break
+				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (tblSettings[usedTable][shotType] - 0.05 or releaseTiming - 0.05)
 			end
 			if not Character.ShotMeterUI.Enabled then -- Shot Meter is not visible
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				repeat
 					task.wait()
-				until Character["ShotMeterTiming"].Value >= tblSettings.tblTimings[shotType]
+				until Character["ShotMeterTiming"].Value >= (tblSettings[usedTable][shotType] - 0.1 or releaseTiming - 0.1)
 				print(tblSettings.Signature, "Shot Meter:", getShotMeter())
 				remotePath.ClientAction:FireServer("Shoot", false)
 				print(tblSettings.Signature, "Landed:", getLandedShotMeter())
@@ -321,8 +320,14 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroe
 
 local window = library:Window("Main")
 
+local window2 = library:Window("Timings")
+
 window:Toggle("Perfect Release", true, function(bool)
-	autoRelease = bool 
+    if bool then
+	    autoRelease = bool
+	else
+	   autoRelease = false
+	end
 	print(tblSettings.Signature, "Perfect Release:", bool)
 end)
 
@@ -335,5 +340,46 @@ window:Button("Rejoin", function()
 		TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
 	end
 end)
+
+window2:Toggle("40 ping timings", true, function(bool40)
+	print(bool40) -- bool is true or false depending on the state of the toggle
+    --if bool40 and (bool200 or bool100) then
+        --bool200 or bool100 = false
+        --usedTable = "tblTimings40"
+    --end
+	if bool40 then
+		usedTable = "tblTimings40"
+	else
+		usedTable = nil
+	end
+end)
+
+window2:Toggle("100 ping timings", false, function(bool100)
+	print(bool100) -- bool is true or false depending on the state of the toggle
+    --if bool100 and (bool200 or bool40) then
+        --(bool40 or bool200) = false
+        --usedTable = "tblTimings100"
+    --end
+	if bool100 then
+		usedTable = "tblTimings100"
+	else
+		usedTable = nil
+	end
+end)
+
+window2:Toggle("200 ping timings", false, function(bool200)
+	print(bool200) -- bool is true or false depending on the state of the toggle
+    --if bool200 and (bool100 or bool40) then
+        --(bool100 or bool40) = false
+        --usedTable = "tblTimings200"
+    --end
+	if bool200 then
+		usedTable = "tblTimings200"
+	else
+		usedTable = nil
+	end
+end)
+
+window2:Label("make sure to disable the toggle \nbefore enabling another one", true)
 
 print(tblSettings.Signature, "Loaded")
