@@ -36,7 +36,7 @@ local tblResources = {
 local tblSettings = {
 	Signature = "[danhub]",
 	autoRelease = true,
-	tblTimings30 = {
+	tblTimings40 = {
 		["Standing Shot"] = 0.875,
 		["Off Dribble Shot"] = 0.865,
 		["Drift Shot"] = 0.85,
@@ -72,6 +72,42 @@ local tblSettings = {
 		["Hopstep Post Hook"] = 0.8,
 		["Dropstep Post Hook"] = 0.8
 	},
+	    tblTimings100 = {
+        ["Standing Shot"] = 0.66,
+        ["Off Dribble Shot"] = 0.685,
+        ["Drift Shot"] = 0.63,
+        ["Far Shot"] = 0.5,
+        ["Freethrow"] = 0.7,
+        ["Hopstep Off Dribble Shot"] = 0.39,
+        ["Hopstep Drift Shot"] = 0.63,
+        ["Layup"] = 0.55,
+        ["Reverse Layup"] = 0.549,
+        ["Hopstep Layup"] = 0.549,
+        ["Eurostep Layup"] = 0.525,
+        ["Dropstep Layup"] = 0.53,
+        ["Post Layup"] = 0.555,
+        ["Floater"] = 0.55,
+        ["Hopstep Floater"] = 0.57,
+        ["Eurostep Floater"] = 0.565,
+        ["Close Shot"] = 0.5,
+        ["Hopstep Close Shot"] = 0.55,
+        ["Dropstep Close Shot"] = 0.55,
+        ["Post Close Shot"] = 0.55,
+        ["AlleyOop Close Shot"] = 0.5,
+        ["Standing Dunk"] = 0.6,
+        ["Hopstep Standing Dunk"] = 0.3,
+        ["Post Standing Dunk"] = 0.6,
+        ["Driving Dunk"] = 0.6,
+        ["AlleyOop Standing Dunk"] = 0.449,
+        ["AlleyOop Driving Dunk"] = 0.449,
+        ["Post Fade"] = 0.635,
+        ["Drift Post Fade"] = 0.62,
+        ["Hopstep Post Fade"] = 0.61,
+        ["Dropstep Post Fade"] = 0.61,
+        ["Post Hook"] = 0.59,
+        ["Hopstep Post Hook"] = 0.515,
+        ["Dropstep Post Hook"] = 0.505
+    },
 	tblTimings200 = {
 		["Standing Shot"] = 0.38,
 		["Off Dribble Shot"] = 0.395,
@@ -173,16 +209,18 @@ local function getRelease()
 end
 
 function getTimingValue(shotType, ping)
-  local lowPing = 30
+  local lowPing = 40
+  local mediumPing = 100
   local highPing = 200
   
-  -- Find the timing values for the low and high ping values
-  local lowPingTiming = tblSettings.tblTimings30[shotType]
-  local highPingTiming = tblSettings.tblTimings200[shotType]
+  -- Find the timing values for the low, medium, and high ping values
+  local lowPingTiming = tblSettings.tblTimings40[shotType] -- tblTimings[lowPing][shotType]
+  local mediumPingTiming = tblSettings.tblTimings100[shotType] -- tblTimings[mediumPing][shotType]
+  local highPingTiming = tblSettings.tblTimings200[shotType] -- tblTimings[highPing][shotType]
   
-  -- Calculate the slope and y-intercept of the line
+  -- Calculate the slope and y-intercept of the line using the low, medium, and high ping values
   local m = (highPingTiming - lowPingTiming) / (highPing - lowPing)
-  local b = lowPingTiming - m * lowPing
+  local b = mediumPingTiming - m * mediumPing
   
   -- Use the calculated line to find the timing value for the given ping value
   return m * ping + b
@@ -190,8 +228,9 @@ end
 
 
 local function noMeterPerfect()
-	for k, v in pairs(tblSettings.tblTimings30) do
-		if k == getShotType() then
+	for k, v in pairs(tblSettings.tblTimings40) do
+	    local shotType = getShotType()
+		if k == shotType then
 			print(tblSettings.Signature, "Shot Type:", getShotType())
 			local ping = Ping:GetValue()
 			local releaseTiming = getTimingValue(getShotType(), ping)
@@ -208,13 +247,13 @@ local function noMeterPerfect()
 end
 
 local function meterPerfect()
-	for k, v in pairs(tblSettings.tblTimings30) do
+	for k, v in pairs(tblSettings.tblTimings40) do
 		local shotType = getShotType()
 		if k == shotType then
 			if Character.ShotMeterUI.Enabled then
 				print(tblSettings.Signature, "Shot Type:", shotType)
 				local ping = Ping:GetValue()
-				local releaseTiming = getTimingValue(getShotType(), ping)
+				local releaseTiming = getTimingValue(shotType, ping)
 				repeat
 					task.wait()
 				until Character.ShotMeterUI.Meter.Bar.Size.Y.Scale >= (releaseTiming - 0.18)
