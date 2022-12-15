@@ -205,14 +205,21 @@ local function getLandedShotMeter()
 end
 
 local function getRelease()
-	local releaseType = "Unknown Release"
-	for k, v in pairs(tblResources.tblReleases) do
-		if getLandedShotMeter() <= v then
-			releaseType = k
-			break
-		end
-	end
-	return releaseType
+    local releaseType = "Unknown Release"
+    if getLandedShotMeter() <= tblReleases["Too-Late Release"] then
+        releaseType = "Too-Late Release"
+    elseif getLandedShotMeter() <= tblReleases["Slightly-Late Release"] then
+        releaseType = "Slightly-Late Release"
+    elseif getLandedShotMeter() <= tblReleases["Perfect Release"] then
+        releaseType = "Perfect Release"
+    elseif getLandedShotMeter() <= tblReleases["Good Release"] then
+        releaseType = "Good Release"
+    elseif getLandedShotMeter() <= tblReleases["Slightly-Early Release"] then
+        releaseType = "Slightly-Early Release"
+    elseif getLandedShotMeter() <= tblReleases["Too-Early Release"] then
+        releaseType = "Too-Early Release"
+    end
+    return releaseType
 end
 
 function getTimingValue(shotType, ping)
