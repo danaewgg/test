@@ -410,6 +410,19 @@ window2:Toggle("100 ping timings", false, function(bool100)
 	end
 end)
 
+window2:Toggle("160 ping timings", false, function(bool160)
+	print(bool200) -- bool is true or false depending on the state of the toggle
+    --if bool200 and (bool100 or bool40) then
+        --(bool100 or bool40) = false
+        --usedTable = "tblTimings200"
+    --end
+	if bool160 then
+		usedTable = "tblTimings160"
+	else
+		usedTable = nil
+	end
+end)
+
 window2:Toggle("200 ping timings", false, function(bool200)
 	print(bool200) -- bool is true or false depending on the state of the toggle
     --if bool200 and (bool100 or bool40) then
